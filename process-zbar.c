@@ -25,7 +25,7 @@ int process_zbar(const unsigned char *img_array)
 
 	/* wrap image data */
 	zbar_image_t *image = zbar_image_create();
-	zbar_image_set_format(image, zbar_fourcc('G','R','E','Y'));
+	zbar_image_set_format(image, zbar_fourcc('Y','8','0','0'));
 	zbar_image_set_size(image, width, height);
 	zbar_image_set_data(image, img_array, width * height, zbar_image_free_data);
 

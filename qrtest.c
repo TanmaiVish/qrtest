@@ -14,6 +14,7 @@ struct timeval time_stop;
 void start(void)
 {
 	gettimeofday(&time_start, NULL);
+	printf("--------------\n");
 }
 
 void stop(void)
@@ -70,6 +71,8 @@ int process_quirc(const unsigned char *img_array)
 	stop();
 
 	quirc_destroy(qr);
+
+	return num_codes;
 }
 
 int main(void)
@@ -92,6 +95,14 @@ int main(void)
 
 	start();
 	process_zbar(barcode_p);
+	stop();
+
+	start();
+	process_zbar(test_image_p);
+	stop();
+
+	start();
+	process_quirc(barcode_p);
 	stop();
 }
 

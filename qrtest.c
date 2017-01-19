@@ -35,8 +35,10 @@ int main(void)
 
 	barcode_l = sizeof(*barcode_p);
 	printf("barcode length: %lu\n", barcode_l);
+	printf("2nd element: %d\n", barcode_p[2]);
 	test_image_l = sizeof(*test_image_p);
 	printf("test_image length: %lu\n", test_image_l);
+	printf("2nd element: %d\n", test_image_p[2]);
 
 	//process_quirc(barcode_p);
 }

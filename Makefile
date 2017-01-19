@@ -11,5 +11,5 @@ libdata.so: data.c data.h
 	gcc -c -Wall -Werror -fpic data.c
 	gcc -shared -o libdata.so data.o
 
-qrtest:
-	gcc -Wall -o qrtest qrtest.c -L `pwd` -ldata
+qrtest: qrtest.c
+	gcc -Wall -o qrtest qrtest.c -L `pwd` -Wl,-rpath=`pwd` -ldata

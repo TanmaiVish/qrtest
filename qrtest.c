@@ -90,6 +90,8 @@ int main(void)
 	process_quirc(test_image_p);
 	stop();
 
-
+	start();
+	process_zbar(barcode_p);
+	stop();
 }
 

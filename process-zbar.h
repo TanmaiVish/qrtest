@@ -1,9 +1,19 @@
+#include <stdlib.h>
 #include <zbar.h>
+#include <stdio.h>
 
 zbar_image_scanner_t *scanner = NULL;
 
+#define zbar_fourcc(a, b, c, d)                 \
+        ((unsigned long)(a) |                   \
+         ((unsigned long)(b) << 8) |            \
+         ((unsigned long)(c) << 16) |           \
+         ((unsigned long)(d) << 24))
+
 int process_zbar(const unsigned char *img_array)
 {
+	printf("DOING ZBAR\n");
+
 	/* create a reader */
 	scanner = zbar_image_scanner_create();
 
@@ -11,15 +21,13 @@ int process_zbar(const unsigned char *img_array)
 	zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_ENABLE, 1);
 
 	/* obtain image data */
-	int width = 0, height = 0;
-	void *raw = NULL;
-	get_data(argv[1], &width, &height, &raw);
+	int width = 4048, height = 3036;
 
 	/* wrap image data */
 	zbar_image_t *image = zbar_image_create();
-	zbar_image_set_format(image, zbar_fourcc('Y','8','0','0'));
+	zbar_image_set_format(image, zbar_fourcc('G','R','E','Y'));
 	zbar_image_set_size(image, width, height);
-	zbar_image_set_data(image, raw, width * height, zbar_image_free_data);
+	zbar_image_set_data(image, img_array, width * height, zbar_image_free_data);
 
 	/* scan the image for barcodes */
 	int n = zbar_scan_image(scanner, image);
@@ -35,6 +43,8 @@ int process_zbar(const unsigned char *img_array)
 	}
 
 	/* clean up */
-	zbar_image_destroy(image);
-	zbar_image_scanner_destroy(scanner);
+	//zbar_image_destroy(image);
+	//zbar_image_scanner_destroy(scanner);
+
+	return n;
 }

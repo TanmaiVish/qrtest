@@ -30,12 +30,10 @@ int main(void)
 {
 	const unsigned char *barcode_p = get_barcode();
 	const unsigned char *test_image_p = get_test_image();
-	unsigned long barcode_l;
-	unsigned long test_image_l;
+	unsigned long barcode_l = get_barcode_length();
+	unsigned long test_image_l = get_test_image_length();
 
-	barcode_l = sizeof(*barcode_p);
 	printf("barcode length: %lu\n", barcode_l);
-	test_image_l = sizeof(*test_image_p);
 	printf("test_image length: %lu\n", test_image_l);
 
 	//process_quirc(barcode_p);

@@ -4,6 +4,7 @@
 #include <sys/time.h>
 
 #include "quirc/lib/quirc.h"
+#include "process-zbar.h"
 
 #include "data.h"
 

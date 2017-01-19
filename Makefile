@@ -17,6 +17,7 @@ quirc/libquirc.so.1.0:
 	mv quirc/libquirc.so.1.0 quirc/libquirc.so
 
 qrtest: qrtest.c quirc/libquirc.so.1.0
-	gcc -Wall -o qrtest qrtest.c \
+	gcc -Wall -o qrtest qrtest.c process-zbar.c \
 		-L `pwd` -Wl,-rpath=`pwd` -ldata \
-		-L './quirc' -Wl,-rpath=./quirc -lquirc
+		-L './quirc' -Wl,-rpath=./quirc -lquirc \
+		-lzbar

@@ -11,5 +11,12 @@ libdata.so: data.c data.h
 	gcc -c -Wall -Werror -fpic data.c
 	gcc -shared -o libdata.so data.o
 
-qrtest: qrtest.c
-	gcc -Wall -o qrtest qrtest.c -L `pwd` -Wl,-rpath=`pwd` -ldata
+quirc/libquirc.so.1.0:
+	cd quirc && \
+		make libquirc.so
+	mv quirc/libquirc.so.1.0 quirc/libquirc.so
+
+qrtest: qrtest.c quirc/libquirc.so.1.0
+	gcc -Wall -o qrtest qrtest.c \
+		-L `pwd` -Wl,-rpath=`pwd` -ldata \
+		-L './quirc' -Wl,-rpath=./quirc -lquirc

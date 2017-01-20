@@ -1,7 +1,7 @@
 all: qrtest
 
 submodules:
-	git submodule update --recursive
+	git submodule update --init --recursive
 
 # convert images with imagemagik
 testimage.h barcode.h:

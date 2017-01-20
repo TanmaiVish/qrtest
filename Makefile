@@ -21,7 +21,7 @@ quirc/libquirc.so: | submodules
 		make libquirc.so
 	mv quirc/libquirc.so.1.0 quirc/libquirc.so
 
-qrtest: qrtest.c quirc/libquirc.so libdata.so
+qrtest: qrtest.c quirc/libquirc.so process-zbar.c libdata.so
 	gcc -Wall -o qrtest qrtest.c process-zbar.c \
 		-L `pwd` -Wl,-rpath=`pwd` -ldata \
 		-L './quirc' -Wl,-rpath=./quirc -lquirc \
@@ -31,3 +31,6 @@ clean:
 	rm -fv qrtest \
 	quirc/libquirc.so \
 	libdata.so testimage.h barcode.h
+
+run: qrtest
+	./qrtest | ./get_avg.awk | tee out

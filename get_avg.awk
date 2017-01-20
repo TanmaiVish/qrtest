@@ -12,8 +12,8 @@ END {
 	print "================\naverages:"
 
 	for (test in total) {
-		if (test[total] > max)
-			max = test[total]
+		if (total[test] > max)
+			max = total[test]
 	}
 
 	OFS = "\t"

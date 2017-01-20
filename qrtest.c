@@ -13,16 +13,22 @@ struct timeval time_stop;
 
 void start(void)
 {
-	gettimeofday(&time_start, NULL);
 	printf("--------------\n");
+	gettimeofday(&time_start, NULL);
 }
 
-void stop(void)
+void stop(char num)
 {
+	unsigned long us;
+
 	gettimeofday(&time_stop, NULL);
-	printf("%lu s %lu us\n",
-		time_stop.tv_sec - time_start.tv_sec,
-		time_stop.tv_usec - time_start.tv_usec);
+
+	us = ((time_stop.tv_usec > time_start.tv_usec) ?
+		time_stop.tv_usec - time_start.tv_usec :
+		time_start.tv_usec - time_stop.tv_usec);
+
+	printf("[ %02d ] %lu s %lu us\n", num,
+		time_stop.tv_sec - time_start.tv_sec, us);
 }
 
 int process_quirc(const unsigned char *img_array)
@@ -31,8 +37,8 @@ int process_quirc(const unsigned char *img_array)
 	uint8_t *image;
 	int w, h, num_codes, i;
 
-	stop();
-	
+	//stop();
+
 	qr = quirc_new();
 	if (!qr) {
 		printf("Error\n");
@@ -43,12 +49,12 @@ int process_quirc(const unsigned char *img_array)
 		printf("Error\n");
 		exit(1);
 	}
-	
+
 	image = quirc_begin(qr, &w, &h);
 	memcpy(image, img_array, w*h);
 	quirc_end(qr);
 
-	stop();
+	//stop();
 
 	num_codes = quirc_count(qr);
 	printf("quirc: number of QR codes: %d\n", num_codes);
@@ -68,12 +74,17 @@ int process_quirc(const unsigned char *img_array)
 			printf("Data: %s\n", data.payload);
 	}
 
-	stop();
+	//stop();
 
 	quirc_destroy(qr);
 
 	return num_codes;
 }
+
+#define LOOPS 50
+unsigned long *times_quirk;
+unsigned long *times_zbar;
+
 
 int main(void)
 {
@@ -81,28 +92,22 @@ int main(void)
 	const unsigned char *test_image_p = get_test_image();
 	unsigned long barcode_l = get_barcode_length();
 	unsigned long test_image_l = get_test_image_length();
+	int i;
 
 	printf("barcode length: %lu\n", barcode_l);
 	printf("test image length: %lu\n", test_image_l);
 
-	start();
-	process_quirc(barcode_p);
-	stop();
+	for (i=0; i<LOOPS; i++) {
 
-	start();
-	process_quirc(test_image_p);
-	stop();
+		start();
+		process_quirc(barcode_p);
+		stop(0);
 
-	start();
-	process_zbar(barcode_p);
-	stop();
+		start();
+		process_zbar(barcode_p);
+		stop(1);
 
-	start();
-	process_zbar(test_image_p);
-	stop();
+	}
 
-	start();
-	process_quirc(barcode_p);
-	stop();
 }
 

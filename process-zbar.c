@@ -12,7 +12,7 @@ zbar_image_scanner_t *scanner = NULL;
 
 int process_zbar(const unsigned char *img_array)
 {
-	printf("DOING ZBAR\n");
+	//printf("DOING ZBAR\n");
 
 	/* create a reader */
 	scanner = zbar_image_scanner_create();

@@ -10,7 +10,7 @@
 
  - libzbar-dev
 
-## QL libs currently tested
+## QR libs currently tested
 
  - quirc [https://github.com/dlbeer/quirc](https://github.com/dlbeer/quirc)
  - Zbar [http://zbar.sourceforge.net/](http://zbar.sourceforge.net/)

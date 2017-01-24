@@ -1,6 +1,7 @@
 #include <stdlib.h>
-#include <zbar.h>
 #include <stdio.h>
+
+#include <zbar.h>
 
 zbar_image_scanner_t *scanner = NULL;
 

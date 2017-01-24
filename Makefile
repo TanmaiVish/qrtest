@@ -21,11 +21,13 @@ quirc/libquirc.so: | submodules
 		make libquirc.so
 	mv quirc/libquirc.so.1.0 quirc/libquirc.so
 
-qrtest: qrtest.c quirc/libquirc.so process-zbar.c libdata.so
-	gcc -Wall -o qrtest qrtest.c process-zbar.c \
+qrtest: qrtest.c quirc/libquirc.so process-zbar.c process-quirc.c libdata.so
+	gcc -Wall -o qrtest qrtest.c process-zbar.c process-quirc.c \
 		-L `pwd` -Wl,-rpath=`pwd` -ldata \
 		-L './quirc' -Wl,-rpath=./quirc -lquirc \
 		-lzbar
+
+
 
 clean:
 	rm -fv qrtest \

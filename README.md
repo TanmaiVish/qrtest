@@ -1,14 +1,20 @@
-# Tests to compare processing speed of various C QR scanning libraries
+# Tests to benchmark processing speed of processing, and accuracy of various C
+# QR scanning libraries
 
-## Usage
+## Usage - speed test
 
  - (optional) build with `make all`
  - run tests with `make run`
  - results are stored in `./out`
 
+## Usage - accuracy tests
+
 ## Dependencies
 
  - libzbar-dev
+ - imagemagick
+ - qrencode
+ - lua (version?)
 
 ## QR libs currently tested
 

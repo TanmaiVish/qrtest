@@ -10,8 +10,6 @@ int process_quirc(const unsigned char *img_array)
 	uint8_t *image;
 	int w, h, num_codes, i;
 
-	//stop();
-
 	qr = quirc_new();
 	if (!qr) {
 		printf("Error\n");
@@ -27,11 +25,10 @@ int process_quirc(const unsigned char *img_array)
 	memcpy(image, img_array, w*h);
 	quirc_end(qr);
 
-	//stop();
-
 	num_codes = quirc_count(qr);
+#if 0
 	printf("quirc: number of QR codes: %d\n", num_codes);
-
+#endif
 	for (i = 0; i < num_codes; i++) {
 		struct quirc_code code;
 		struct quirc_data data;
@@ -44,10 +41,8 @@ int process_quirc(const unsigned char *img_array)
 		if (err)
 			printf("DECODE FAILED: %s\n", quirc_strerror(err));
 		else
-			printf("Data: %s\n", data.payload);
+			printf("quirc %s\n", data.payload);
 	}
-
-	//stop();
 
 	quirc_destroy(qr);
 

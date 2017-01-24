@@ -4,7 +4,7 @@
 
 #include "quirc/lib/quirc.h"
 
-int process_quirc(const unsigned char *img_array)
+int process_quirc(const unsigned char *img_array, int width, int height)
 {
 	struct quirc *qr;
 	uint8_t *image;
@@ -16,7 +16,7 @@ int process_quirc(const unsigned char *img_array)
 		exit(1);
 	}
 
-	if (quirc_resize(qr, 4048, 3036) < 0) {
+	if (quirc_resize(qr, width, height) < 0) {
 		printf("Error\n");
 		exit(1);
 	}

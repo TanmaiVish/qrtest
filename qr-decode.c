@@ -107,11 +107,11 @@ int main(int argc, char *argv[])
 	get_png_data();
 
 	start();
-	process_quirc();
+	process_quirc(data, width, height);
 	stop(0);
 
 	start();
-	process_zbar();
+	process_zbar(data, width, height);
 	stop(1);
 
 	/* free memory */

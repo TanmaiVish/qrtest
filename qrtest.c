@@ -51,11 +51,11 @@ int main(void)
 	for (i=0; i<LOOPS; i++) {
 
 		start();
-		process_quirc(barcode_p);
+		process_quirc(barcode_p, 4048, 3036);
 		stop(0);
 
 		start();
-		process_zbar(barcode_p);
+		process_zbar(barcode_p, 4048, 3036);
 		stop(1);
 
 	}

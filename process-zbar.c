@@ -11,16 +11,13 @@ zbar_image_scanner_t *scanner = NULL;
          ((unsigned long)(c) << 16) |           \
          ((unsigned long)(d) << 24))
 
-int process_zbar(const unsigned char *img_array)
+int process_zbar(const unsigned char *img_array, int width, int height)
 {
 	/* create a reader */
 	scanner = zbar_image_scanner_create();
 
 	/* configure the reader */
 	zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_ENABLE, 1);
-
-	/* obtain image data */
-	int width = 4048, height = 3036;
 
 	/* wrap image data */
 	zbar_image_t *image = zbar_image_create();

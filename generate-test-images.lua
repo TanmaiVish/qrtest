@@ -1,10 +1,5 @@
 #!/usr/bin/env lua
 
--- blur (focus):
---   convert test.png -blur 0x0 blur.png
---   convert test.png -blur 0x0.5 blur.png
---   convert test.png -blur 0x10 blur.png
-
 -- mask section of QR centre:
 --   convert large.png -fill blue -draw "circle 2024,1518 2024,1818" circ.png
 
@@ -61,5 +56,11 @@ function resize_canonical(path, out_path)
 end
 
 -- Distortion functions --
+
+-- Blur (focus)
+--   convert test.png -blur 0x0.5 blur.png
+function blur(input, output, amount)
+	os.execute("convert " .. input .. " -blur 0x" .. amount .. " " .. output)
+end
 
 

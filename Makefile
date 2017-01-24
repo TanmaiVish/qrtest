@@ -1,4 +1,4 @@
-all: qrtest
+all: qrtest qr-decode
 
 submodules:
 	git submodule update --init --recursive
@@ -27,6 +27,11 @@ qrtest: qrtest.c quirc/libquirc.so process-zbar.c process-quirc.c libdata.so
 		-L './quirc' -Wl,-rpath=./quirc -lquirc \
 		-lzbar
 
+qr-decode: qr-decode.c process-zbar.c quirc/libquirc.so process-quirc.c
+	gcc -Wall -o qr-decode qr-decode.c process-zbar.c process-quirc.c \
+		-L './quirc' -Wl,-rpath=./quirc -lquirc \
+		-lzbar \
+		-lpng
 
 
 clean:

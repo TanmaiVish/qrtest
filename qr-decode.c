@@ -29,14 +29,18 @@ void stop(char num)
 		time_stop.tv_sec - time_start.tv_sec, us);
 }
 
-int width, height;
+int width, height, row_bytes;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
 
-int get_png_data(char *filename)
+void get_png_data(char *filename)
 {
 	FILE *fp = fopen(filename, "rb");
+		if (!fp) {
+			printf("Error reading file.\n");
+			exit(1);
+		}
 
 	png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if(!png) abort();
@@ -54,6 +58,9 @@ int get_png_data(char *filename)
 	height		= png_get_image_height(png, info);
 	color_type	= png_get_color_type(png, info);
 	bit_depth	= png_get_bit_depth(png, info);
+	row_bytes	= png_get_rowbytes(png,info);
+
+	printf("image width: %d height: %d\n", width, height);
 
 	// Read any color_type into 8bit depth, RGBA format.
 	// See http://www.libpng.org/pub/png/libpng-manual.txt
@@ -104,8 +111,8 @@ void clean_up()
 int main(int argc, char *argv[])
 {
 	/* get png data */
-	get_png_data();
-
+	get_png_data(argv[1]);
+#if 0
 	start();
 	process_quirc(data, width, height);
 	stop(0);
@@ -113,7 +120,9 @@ int main(int argc, char *argv[])
 	start();
 	process_zbar(data, width, height);
 	stop(1);
-
+#endif
 	/* free memory */
 	clean_up();
+
+	return 0;
 }

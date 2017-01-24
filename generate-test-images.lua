@@ -37,6 +37,9 @@
 --   convert large.png -wave 10x1000 rotate.png
 
 
+
+---- General functions ----
+
 -- TODO returns, error handling, dependency checking
 
 -- Generate QR
@@ -57,7 +60,9 @@ function resize_canonical(path, out_path)
 	resize_canvas(path, out_path, 4048, 3036)
 end
 
--- Distortion functions --
+
+
+---- Distortion functions ----
 
 -- Blur (focus)
 --   convert test.png -blur 0x0.5 blur.png

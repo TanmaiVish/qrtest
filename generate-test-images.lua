@@ -71,3 +71,30 @@ function blur(input, output, amount)
 end
 
 
+
+---- Main function ----
+
+test_string = "xahvahjahThahza6yu2baiBaiYoogohpu8koorie6ohBee4Phi" ..
+	      "e8ahd1Sheidooqu9caocu7ahch4dool0aifai7wies6Shuiqu6"
+-- TODO: Randomise, encoded data could affect resillience
+
+qr_large	= "/tmp/qr-100px.png"
+qr_med		= "/tmp/qr-50px.png"
+qr_small	= "/tmp/qr-20px.png"
+
+function run_tests()
+	-- Make QR codes
+	make_qr(100, test_string, qr_large)  -- large
+	make_qr(50,  test_string, qr_med)    -- med
+	make_qr(20,  test_string, qr_small)  -- med-small
+
+	-- Blur
+	for i=0,20,1 do
+		out = "/tmp/qr-blur-" .. i .. ".png"
+		print("BLUR " .. out)
+		blur(qr_small, out, i)
+		os.execute("./qrtest " .. out)
+	end
+end
+
+run_tests()

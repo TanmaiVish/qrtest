@@ -1,8 +1,5 @@
 #!/usr/bin/env lua
 
--- qrencode lemon-cheese -s 100 -v 2 -o test.png
--- convert test.png -gravity center -extent 4048xtttt extent_center.png
-
 -- blur (focus):
 --   convert test.png -blur 0x0 blur.png
 --   convert test.png -blur 0x0.5 blur.png
@@ -43,3 +40,26 @@
 -- sine wave displacement
 --   convert large.png -wave 100x1000 rotate.png
 --   convert large.png -wave 10x1000 rotate.png
+
+-- TODO returns, error handling, dependency checking
+
+-- Generate QR
+-- qrencode lemon-cheese -s 100 -v 2 -o test.png
+function make_qr(block_size, data, path)
+	os.execute("qrencode " .. data .. " -s " .. block_size .. "-v 2 -o " .. path)
+end
+
+function resize_canvas(path, out_path, width, height)
+	os.execute("convert " .. path ..
+		   " -gravity center -extent " ..
+		   width .. "x" .. height .. " " .. out_path)
+end
+
+-- convert test.png -gravity center -extent 4048x3036 extent_center.png
+function resize_canonical(path, out_path)
+	resize_canvas(path, out_path, 4048, 3036)
+end
+
+-- Distortion functions --
+
+

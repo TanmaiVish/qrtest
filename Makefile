@@ -33,6 +33,10 @@ qr-decode: qr-decode.c process-zbar.c quirc/libquirc.so process-quirc.c
 		-lzbar \
 		-lpng
 
+accuracy-report.md: qr-decode
+	./generate-test-images.lua 2> /dev/null | \
+		./get_report.awk \
+		> accuracy-report.md
 
 clean:
 	rm -fv qrtest \

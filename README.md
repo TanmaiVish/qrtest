@@ -9,6 +9,9 @@
 
 ## Usage - accuracy tests
 
+ - (optional) `make all`
+ - `make accuracy-report.md`
+
 ## Dependencies
 
  - libzbar-dev

@@ -18,8 +18,8 @@ libdata.so: data.c data.h testimage.h barcode.h
 
 quirc/libquirc.so: | submodules
 	cd quirc && \
-		make libquirc.so
-	mv quirc/libquirc.so.1.0 quirc/libquirc.so
+		make DQUIRC_MAX_REGIONS=65534 libquirc.so
+	ln -s quirc/libquirc.so.1.0 quirc/libquirc.so
 
 qrtest: qrtest.c quirc/libquirc.so process-zbar.c process-quirc.c libdata.so
 	gcc -Wall -o qrtest qrtest.c process-zbar.c process-quirc.c \

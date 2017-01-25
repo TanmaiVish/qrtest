@@ -100,6 +100,11 @@ function perspective(input, output, amount)
 end
 
 
+function scale(output, amount, data_string, ecc_level)
+	make_qr(amount, data_string, ecc_level, "/tmp/scale-in.png")
+	resize_canvas("/tmp/scale-in.png", output, 1000, 1000)
+end
+
 
 ---- Test functions ----
 image_test = ""
@@ -139,6 +144,8 @@ RED_CONT_MAX = 100
 ROTATE_MAX = 180
 PERS_MAX = 600
 PERS_STEP = 30
+SCALE_MAX = 20
+SCALE_STEP = 1
 
 function run_tests()
 	-- Make QR codes
@@ -165,12 +172,18 @@ function run_tests()
 		rotate(qr_med, image_test, i)
 		test_finish()
 	end
---]]
 	for i=0,PERS_MAX,PERS_STEP do
 		test_start("perspective", i)
 		perspective(qr_small, image_test, i)
 		test_finish()
 	end
+--]]
+	for i=SCALE_MAX,1,-1 * SCALE_STEP do
+		test_start("scale", i)
+		scale(image_test, i, test_string, 'L')
+		test_finish()
+	end
+
 
 end
 

@@ -121,7 +121,7 @@ void clean_up()
 int main(int argc, char *argv[])
 {
 	unsigned char *buffer;
-	int r;
+	int x, y;
 	png_bytep row;
 	png_bytep px;
 
@@ -133,10 +133,11 @@ int main(int argc, char *argv[])
 
 	printf("row width: %d image width: %d\n", row_bytes, width);
 
-	for(int y = 0; y < height; y++) {
+	for(y = 0; y < height; y++) {
 		row = row_pointers[y];
-		for(int x = 0; x < width; x++) {
+		for(x = 0; x < width; x++) {
 			px = &(row[x * 4]);
+			/* we dont need the other two channels, or alpha */
 			buffer[x + (y*width)] = px[0];
 		}
 	}

@@ -3,10 +3,6 @@
 -- mask section of QR centre:
 --   convert large.png -fill blue -draw "circle 2024,1518 2024,1818" circ.png
 
--- reduce contrast (background colour, reduced lighting):
---   convert large.png -brightness-contrast 0,-50 contrast.png
---   convert large.png -brightness-contrast 0,-100 contrast.png
-
 -- brightness, tends to white (sensor saturation, for example):
 --   convert large.png -brightness-contrast +50,0 contrast.png
 
@@ -78,6 +74,16 @@ function blur(input, output, amount)
 	os.execute("convert " .. input .. " -blur 0x" .. amount .. " " .. output)
 end
 
+-- reduce contrast (background colour, reduced lighting):
+--   convert large.png -brightness-contrast 0,-50 contrast.png
+--   convert large.png -brightness-contrast 0,-100 contrast.png
+function reduce_contrast(input, output, amount)
+	os.execute("convert ".. input ..
+		   " -brightness-contrast 0,-" .. amount .. " " ..
+		   output)
+end
+
+
 ---- Test functions ----
 image_test = ""
 image_thumb = ""
@@ -112,6 +118,7 @@ qr_small	= "/tmp/qr-20px.png"
 -- Settings --
 WIKI_PATH = "./qrtest.wiki/"
 BLUR_MAX = 15
+RED_CONT_MAX = 100
 
 function run_tests()
 	-- Make QR codes
@@ -122,9 +129,16 @@ function run_tests()
 	os.execute("mkdir -p " .. WIKI_PATH .. "output")
 
 	-- Blur
+--[[
 	for i=0,BLUR_MAX,1 do
 		test_start("blur", i)
 		blur(qr_small, image_test, i)
+		test_finish()
+	end
+--]]
+	for i=0,RED_CONT_MAX,5 do
+		test_start("reduce-contrast", i)
+		reduce_contrast(qr_med, image_test, i)
 		test_finish()
 	end
 end

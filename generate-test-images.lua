@@ -60,9 +60,10 @@ function resize_canonical(path, out_path)
 	resize_canvas(path, out_path, 4048, 3036)
 end
 
-function generate_thumb(path, out_path)
+function thumb(path, out_path)
 	os.execute("convert " .. path ..
-		   " -thumbnail 1000x500 -unsharp 0x0.5" .. out_path)
+		   " -thumbnail 1000x500" ..
+		   " -unsharp 0x0.5 " .. out_path)
 end
 
 
@@ -78,13 +79,18 @@ end
 
 ---- Main function ----
 
-test_string = "xahvahjahThahza6yu2baiBaiYoogohpu8koorie6ohBee4Phi" ..
-	      "e8ahd1Sheidooqu9caocu7ahch4dool0aifai7wies6Shuiqu6"
+test_string = "xahvahjahThahza6yu2baiBaiYoogohpu8koorie6ohBee4Phi" .. ""
+--	      "e8ahd1Sheidooqu9caocu7ahch4dool0aifai7wies6Shuiqu6"
 -- TODO: Randomise, encoded data could affect resillience
 
 qr_large	= "/tmp/qr-100px.png"
 qr_med		= "/tmp/qr-50px.png"
 qr_small	= "/tmp/qr-20px.png"
+
+-- Settings --
+WIKI_PATH = "./qrtest.wiki/"
+BLUR_MAX = 15
+
 
 function run_tests()
 	-- Make QR codes
@@ -92,12 +98,18 @@ function run_tests()
 	make_qr(50,  test_string, qr_med)    -- med
 	make_qr(20,  test_string, qr_small)  -- med-small
 
+	os.execute("mkdir -p " .. WIKI_PATH .. "output")
+
 	-- Blur
-	for i=0,20,1 do
-		out = "/tmp/qr-blur-" .. i .. ".png"
-		print("BLUR " .. out)
-		blur(qr_small, out, i)
-		os.execute("./qr-decode " .. out)
+	for i=0,BLUR_MAX,1 do
+		out = "qr-blur-" .. i
+		image_test = "/tmp/" .. out .. ".png"
+		image_thumb = WIKI_PATH "output/" .. out .. "-thumb.png"
+		print("blur level " .. i)
+		blur(qr_small, image_test, i)
+		print(image_thumb)
+		thumb(image_test, image_thumb)
+		os.execute("./qr-decode " .. image_test)
 	end
 end
 

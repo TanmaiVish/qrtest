@@ -60,7 +60,10 @@ void get_png_data(char *filename)
 	bit_depth	= png_get_bit_depth(png, info);
 	row_bytes	= png_get_rowbytes(png,info);
 
-	printf("image width: %d height: %d bit depth: %d colour type: %d\n", width, height, bit_depth, color_type);
+	printf("image width: %d height: %d "
+		"bit depth: %d colour type: %d channels: %d\n",
+		width, height, bit_depth, color_type,
+		png_get_channels(png, info));
 
 	if (color_type != PNG_COLOR_TYPE_GRAY) {
 		printf("Image is not grayscale.\n");
@@ -115,6 +118,17 @@ void clean_up()
 	free(row_pointers);
 }
 
+void process_png_file() {
+  for(int y = 0; y < height; y++) {
+    png_bytep row = row_pointers[y];
+    for(int x = 0; x < width; x++) {
+      png_bytep px = &(row[x * 4]);
+      // Do something awesome for each pixel here...
+      printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+    }
+  }
+}
+
 int main(int argc, char *argv[])
 {
 	unsigned char *buffer, *buffer_p;
@@ -129,11 +143,22 @@ int main(int argc, char *argv[])
 
 	printf("row width: %d image width: %d\n", row_bytes, width);
 
+	process_png_file();
+#if 0
 	int p;
 	for (r = 0; r < height; r++) {
-		for (p=0; p<width; p++)
-			printf("%d %d : %d,\n", r, p, row_pointers[r][p]);
-	//	memcpy(&buffer[r * width], &row_pointers[r][0], width);
+		for (p=0; p<width; p+=4) {
+			printf("%d,\n", row_pointers[r][p]);
+		}
+	}
+#endif
+
+	for(int y = 0; y < height; y++) {
+		png_bytep row = row_pointers[y];
+		for(int x = 0; x < width; x++) {
+			png_bytep px = &(row[x * 4]);
+			buffer[x + (y*width)] = px[0];
+		}
 	}
 
 	printf("---\n");

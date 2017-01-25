@@ -120,11 +120,13 @@ function test_start(identifier, level)
 	print("test string:\t[" .. test_string .. "]")
 	print("test image:\t[" .. image_test .. "]")
 	print("thumb image:\t[" .. image_thumb .. "]")
+	io.flush()
 end
 
 function test_finish()
 	thumb(image_test, path_thumb)
 	os.execute("./qr-decode " .. image_test)
+	io.flush()
 end
 
 ---- Main function ----

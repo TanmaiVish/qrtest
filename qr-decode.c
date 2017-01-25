@@ -60,10 +60,11 @@ void get_png_data(char *filename)
 	bit_depth	= png_get_bit_depth(png, info);
 	row_bytes	= png_get_rowbytes(png,info);
 
-	printf("image width: %d height: %d "
+	fprintf(stderr, "image width: %d height: %d "
 		"bit depth: %d colour type: %d channels: %d\n",
 		width, height, bit_depth, color_type,
 		png_get_channels(png, info));
+	fflush(stderr);
 
 	if (color_type != PNG_COLOR_TYPE_GRAY &&
 	    color_type != PNG_COLOR_TYPE_GRAY_ALPHA) {
@@ -82,7 +83,8 @@ void get_png_data(char *filename)
 
 	// PNG_COLOR_TYPE_GRAY_ALPHA is always 8 or 16bit depth.
 	if(color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
-		printf("Expanding bit depth %d to 8\n", bit_depth);
+		fprintf(stderr, "Expanding bit depth %d to 8\n", bit_depth);
+		fflush(stderr);
 		png_set_expand_gray_1_2_4_to_8(png);
 	}
 
@@ -132,7 +134,8 @@ int main(int argc, char *argv[])
 	/* allocate buffer */
 	buffer   = malloc(width * height);
 
-	printf("row width: %d image width: %d\n", row_bytes, width);
+	fprintf(stderr, "row width: %d image width: %d\n", row_bytes, width);
+	fflush(stderr);
 
 	for(y = 0; y < height; y++) {
 		row = row_pointers[y];

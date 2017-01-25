@@ -44,8 +44,11 @@
 
 -- Generate QR
 --   qrencode lemon-cheese -s 100 -v 2 -o test.png
-function make_qr(block_size, data, path)
-	os.execute("qrencode " .. data .. " -s " .. block_size .. "-v 2 -o " .. path)
+function make_qr(block_size, data, ecc_level, path)
+	os.execute("qrencode " .. data ..
+		   " -s " .. block_size ..
+		   " -v 2 -l " .. ecc_level ..
+		   " -o " .. path)
 end
 
 -- Resize canvas
@@ -94,9 +97,9 @@ BLUR_MAX = 15
 
 function run_tests()
 	-- Make QR codes
-	make_qr(100, test_string, qr_large)  -- large
-	make_qr(50,  test_string, qr_med)    -- med
-	make_qr(20,  test_string, qr_small)  -- med-small
+	make_qr(100, test_string, "L", qr_large)  -- large
+	make_qr(50,  test_string, "L", qr_med)    -- med
+	make_qr(20,  test_string, "L", qr_small)  -- med-small
 
 	os.execute("mkdir -p " .. WIKI_PATH .. "output")
 

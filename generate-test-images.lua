@@ -78,12 +78,31 @@ function blur(input, output, amount)
 	os.execute("convert " .. input .. " -blur 0x" .. amount .. " " .. output)
 end
 
+---- Test functions ----
+image_test = ""
+image_thumb = ""
+path_thumb = ""
 
+function test_start(identifier, level)
+	out = "qr-".. identifier .. "-" .. level
+	image_test = "/tmp/" .. out .. ".png"
+	image_thumb = "output/" .. out .. "-thumb.png"
+	path_thumb = WIKI_PATH .. image_thumb
+	print("test:\t\t[" .. identifier .. " level " .. level .. "]")
+	print("test string:\t[" .. test_string .. "]")
+	print("test image:\t[" .. image_test .. "]")
+	print("thumb image:\t[" .. image_thumb .. "]")
+end
+
+function test_finish()
+	thumb(image_test, path_thumb)
+	os.execute("./qr-decode " .. image_test)
+end
 
 ---- Main function ----
 
-test_string = "xahvahjahThahza6yu2baiBaiYoogohpu8koorie6ohBee4Phi" .. ""
---	      "e8ahd1Sheidooqu9caocu7ahch4dool0aifai7wies6Shuiqu6"
+test_string = "xahvahjahThahza6yu2baiBaiYoogohpu8koorie6ohBee4Phi" ..
+	      "e8ahd1Sheidooqu9caocu7ahch4dool0aifai7wies6Shuiqu6"
 -- TODO: Randomise, encoded data could affect resillience
 
 qr_large	= "/tmp/qr-100px.png"
@@ -93,7 +112,6 @@ qr_small	= "/tmp/qr-20px.png"
 -- Settings --
 WIKI_PATH = "./qrtest.wiki/"
 BLUR_MAX = 15
-
 
 function run_tests()
 	-- Make QR codes
@@ -105,14 +123,11 @@ function run_tests()
 
 	-- Blur
 	for i=0,BLUR_MAX,1 do
-		out = "qr-blur-" .. i
-		image_test = "/tmp/" .. out .. ".png"
-		image_thumb = WIKI_PATH .. "output/" .. out .. "-thumb.png"
-		print("blur level " .. i)
+		test_start("blur", i)
 		blur(qr_small, image_test, i)
-		thumb(image_test, image_thumb)
-		os.execute("./qr-decode " .. image_test)
+		test_finish()
 	end
 end
 
 run_tests()
+

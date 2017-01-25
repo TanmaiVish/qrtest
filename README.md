@@ -1,5 +1,5 @@
-# Tests to benchmark processing speed of processing, and accuracy of various C
-# QR scanning libraries
+# Tests to benchmark processing speed and accuracy of various C QR scanning
+# libraries
 
 ## Usage - speed test
 

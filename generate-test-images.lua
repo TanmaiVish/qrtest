@@ -93,7 +93,7 @@ function run_tests()
 		out = "/tmp/qr-blur-" .. i .. ".png"
 		print("BLUR " .. out)
 		blur(qr_small, out, i)
-		os.execute("./qrtest " .. out)
+		os.execute("./qr-decode " .. out)
 	end
 end
 

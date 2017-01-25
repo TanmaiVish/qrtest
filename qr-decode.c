@@ -65,7 +65,8 @@ void get_png_data(char *filename)
 		width, height, bit_depth, color_type,
 		png_get_channels(png, info));
 
-	if (color_type != PNG_COLOR_TYPE_GRAY) {
+	if (color_type != PNG_COLOR_TYPE_GRAY &&
+	    color_type != PNG_COLOR_TYPE_GRAY_ALPHA) {
 		printf("Image is not grayscale.\n");
 		exit(1);
 	}

@@ -60,6 +60,10 @@ function resize_canonical(path, out_path)
 	resize_canvas(path, out_path, 4048, 3036)
 end
 
+function generate_thumb(path, out_path)
+	os.execute("convert " .. path ..
+		   " -thumbnail 1000x500 -unsharp 0x0.5" .. out_path)
+end
 
 
 ---- Distortion functions ----

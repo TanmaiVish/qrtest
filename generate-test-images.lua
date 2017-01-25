@@ -9,12 +9,6 @@
 -- skew (view angle/printing error)
 --
 
--- perspective (viewing angle)
---   convert test50.png -gravity center -extent 1800x1650 pers-in.png
---   N=100; convert pers-in.png -distort Perspective "275,200 $((275-$N)),200   275,1450 $((275+$N)),1450   1525,1450 $((1525-$N)),1450   1525,200 $((1525+$N)),200" pers.png
---   convert pers.png -gravity center -extent 4048x3036 pers-out.png
-
---   N=250; convert pers-in.png -distort Perspective "275,200 $((275+$N)),200   275,1450 $((275-$N)),1450   1525,1450 $((1525+$N)),1450   1525,200 $((1525-$N)),200" pers.png
 
 -- barrel distortion (fisheye) (lens)
 --   convert med.png -implode -0.1 imp.png
@@ -82,9 +76,25 @@ end
 
 -- rotation
 --   convert large.png -rotate 45 rotate.png
+-- TODO: ensure consistent block size across tests
 function rotate(input, output, amount)
 	os.execute("convert " .. input .." -rotate ".. amount .. " " .. output)
 
+end
+
+-- perspective (viewing angle)
+--   convert test50.png -gravity center -extent 1800x1650 pers-in.png
+--   N=100; convert pers-in.png -distort Perspective "275,200 $((275-$N)),200   275,1450 $((275+$N)),1450   1525,1450 $((1525-$N)),1450   1525,200 $((1525+$N)),200" pers.png
+--   convert pers.png -gravity center -extent 4048x3036 pers-out.png
+function perspective(input, output, amount)
+	os.execute("convert " .. input ..
+		   " -gravity center -extent 1800x1650 /tmp/pers-in.png")
+	os.execute("convert /tmp/pers-in.png -distort Perspective '" ..
+		   "275,200 "   .. (275-amount)  .. ",200 " ..
+		   "275,1450 "  .. (275+amount)  .. ",1450 " ..
+		   "1525,1450 " .. (1525-amount) .. ",1450 " ..
+		   "1525,200 "  .. (1525+amount) .. ",200 " ..
+		   "' " .. output)
 end
 
 
@@ -125,6 +135,7 @@ WIKI_PATH = "./qrtest.wiki/"
 BLUR_MAX = 15
 RED_CONT_MAX = 100
 ROTATE_MAX = 180
+PERS_MAX = 250
 
 function run_tests()
 	-- Make QR codes
@@ -146,13 +157,20 @@ function run_tests()
 		reduce_contrast(qr_med, image_test, i)
 		test_finish()
 	end
---]]
 	for i=0,ROTATE_MAX,15 do
 		test_start("rotate", i)
 		rotate(qr_med, image_test, i)
 		test_finish()
 	end
+--]]
+	for i=0,PERS_MAX,10 do
+		test_start("perspective", i)
+		perspective(qr_small, image_test, i)
+		test_finish()
+	end
+
 end
 
 run_tests()
 
+-- TODO: reduce granularity, only report failures?

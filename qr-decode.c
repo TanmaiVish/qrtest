@@ -60,7 +60,12 @@ void get_png_data(char *filename)
 	bit_depth	= png_get_bit_depth(png, info);
 	row_bytes	= png_get_rowbytes(png,info);
 
-	printf("image width: %d height: %d\n", width, height);
+	printf("image width: %d height: %d bit depth: %d colour type: %d\n", width, height, bit_depth, color_type);
+
+	if (color_type != PNG_COLOR_TYPE_GRAY) {
+		printf("Image is not grayscale.\n");
+		exit(1);
+	}
 
 	// Read any color_type into 8bit depth, RGBA format.
 	// See http://www.libpng.org/pub/png/libpng-manual.txt
@@ -72,8 +77,10 @@ void get_png_data(char *filename)
 		png_set_palette_to_rgb(png);
 
 	// PNG_COLOR_TYPE_GRAY_ALPHA is always 8 or 16bit depth.
-	if(color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
+	if(color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
+		printf("Expanding bit depth %d to 8\n", bit_depth);
 		png_set_expand_gray_1_2_4_to_8(png);
+	}
 
 	if(png_get_valid(png, info, PNG_INFO_tRNS))
 		png_set_tRNS_to_alpha(png);
@@ -110,18 +117,40 @@ void clean_up()
 
 int main(int argc, char *argv[])
 {
+	unsigned char *buffer, *buffer_p;
+	int r;
+
 	/* get png data */
 	get_png_data(argv[1]);
-#if 0
+
+	/* allocate buffer */
+	buffer   = malloc(width * height);
+	buffer_p = buffer;
+
+	printf("row width: %d image width: %d\n", row_bytes, width);
+
+	int p;
+	for (r = 0; r < height; r++) {
+		for (p=0; p<width; p++)
+			printf("%d %d : %d,\n", r, p, row_pointers[r][p]);
+	//	memcpy(&buffer[r * width], &row_pointers[r][0], width);
+	}
+
+	printf("---\n");
+
+	//for (p=0; p<width*height; p++)
+	//	printf("%d,\n", buffer[p]);
+
 	start();
-	process_quirc(data, width, height);
+	process_quirc(buffer, width, height);
 	stop(0);
 
 	start();
-	process_zbar(data, width, height);
+	process_zbar(buffer, width, height);
 	stop(1);
-#endif
+
 	/* free memory */
+	free(buffer);
 	clean_up();
 
 	return 0;

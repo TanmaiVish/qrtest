@@ -6,8 +6,11 @@ BEGIN {
 
 /test:/ {
 	# start of new record
+	test_id = $2
+
 	# print last record
-	print_record()
+	if (last_id)
+		print_record()
 
 	if (last_id != test_id) {
 		print_test_header(test_id)
@@ -21,7 +24,6 @@ BEGIN {
 	thumb_path = ""
 	test_string = ""
 
-	test_id = $2
 	test_level = $4
 }
 
@@ -65,13 +67,20 @@ function print_record()
 {
 	print "\n## " test_level
 	print "\n!["test_id" "test_level"]("thumb_path")"
+
 	print "\nquirc output:\n"
 	for (e in quirc_result)
 		print "    " quirc_result[e]
+	if (length(quirc_result) == 0)
+		print "    FAIL"
+
 	print "\nZbar output:\n"
 	for (e in zbar_result)
 		print "    " zbar_result[e]
-	print "\nTiming: \n"
+	if (length(zbar_result) == 0)
+		print "    FAIL"
+
+	print "\nTiming:\n"
 	for (e in timing)
 		print "    " timing[e]
 
@@ -81,5 +90,4 @@ function print_test_header(id)
 {
 	print "\n"
 	print "# " id
-	print "===="
 }

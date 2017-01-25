@@ -141,7 +141,7 @@ qr_small	= "/tmp/qr-20px.png"
 
 -- Settings --
 WIKI_PATH = "./qrtest.wiki/"
-BLUR_MAX = 15
+BLUR_MAX = 12
 RED_CONT_MAX = 100
 ROTATE_MAX = 180
 PERS_MAX = 600
@@ -194,3 +194,4 @@ run_tests()
 -- TODO: reduce granularity, only report failures?
 -- TODO: masking section of QR, run over other tests
 -- TODO: automatic test length until all libs fail
+-- TODO: cycling QR payload data

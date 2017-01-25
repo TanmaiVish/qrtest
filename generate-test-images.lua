@@ -86,15 +86,17 @@ end
 --   convert test50.png -gravity center -extent 1800x1650 pers-in.png
 --   N=100; convert pers-in.png -distort Perspective "275,200 $((275-$N)),200   275,1450 $((275+$N)),1450   1525,1450 $((1525-$N)),1450   1525,200 $((1525+$N)),200" pers.png
 --   convert pers.png -gravity center -extent 4048x3036 pers-out.png
+-- TODO: don't scale
 function perspective(input, output, amount)
 	os.execute("convert " .. input ..
-		   " -gravity center -extent 1800x1650 /tmp/pers-in.png")
-	os.execute("convert /tmp/pers-in.png -distort Perspective '" ..
-		   "275,200 "   .. (275-amount)  .. ",200 " ..
-		   "275,1450 "  .. (275+amount)  .. ",1450 " ..
-		   "1525,1450 " .. (1525-amount) .. ",1450 " ..
-		   "1525,200 "  .. (1525+amount) .. ",200 " ..
-		   "' " .. output)
+		   " -gravity center -extent 1800x1800 /tmp/pers-in.png")
+	string = "convert /tmp/pers-in.png -distort Perspective '" ..
+		   "275,200 "   .. (275+amount)  .. ",200   " ..
+		   "275,1450 "  .. (275-amount)  .. ",1450   " ..
+		   "1525,1450 " .. (1525+amount) .. ",1450   " ..
+		   "1525,200 "  .. (1525-amount) .. ",200   " ..
+		   "' -background white " .. output
+	os.execute(string)
 end
 
 
@@ -135,7 +137,8 @@ WIKI_PATH = "./qrtest.wiki/"
 BLUR_MAX = 15
 RED_CONT_MAX = 100
 ROTATE_MAX = 180
-PERS_MAX = 250
+PERS_MAX = 600
+PERS_STEP = 30
 
 function run_tests()
 	-- Make QR codes
@@ -163,7 +166,7 @@ function run_tests()
 		test_finish()
 	end
 --]]
-	for i=0,PERS_MAX,10 do
+	for i=0,PERS_MAX,PERS_STEP do
 		test_start("perspective", i)
 		perspective(qr_small, image_test, i)
 		test_finish()
@@ -174,3 +177,5 @@ end
 run_tests()
 
 -- TODO: reduce granularity, only report failures?
+-- TODO: masking section of QR, run over other tests
+-- TODO: automatic test length until all libs fail

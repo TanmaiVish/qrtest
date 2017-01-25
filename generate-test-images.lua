@@ -107,10 +107,9 @@ function run_tests()
 	for i=0,BLUR_MAX,1 do
 		out = "qr-blur-" .. i
 		image_test = "/tmp/" .. out .. ".png"
-		image_thumb = WIKI_PATH "output/" .. out .. "-thumb.png"
+		image_thumb = WIKI_PATH .. "output/" .. out .. "-thumb.png"
 		print("blur level " .. i)
 		blur(qr_small, image_test, i)
-		print(image_thumb)
 		thumb(image_test, image_thumb)
 		os.execute("./qr-decode " .. image_test)
 	end

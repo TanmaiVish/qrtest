@@ -6,9 +6,6 @@
 -- brightness, tends to white (sensor saturation, for example):
 --   convert large.png -brightness-contrast +50,0 contrast.png
 
--- rotation
---   convert large.png -rotate 45 rotate.png
-
 -- skew (view angle/printing error)
 --
 
@@ -83,6 +80,14 @@ function reduce_contrast(input, output, amount)
 		   output)
 end
 
+-- rotation
+--   convert large.png -rotate 45 rotate.png
+function rotate(input, output, amount)
+	os.execute("convert " .. input .." -rotate ".. amount .. " " .. output)
+
+end
+
+
 
 ---- Test functions ----
 image_test = ""
@@ -119,6 +124,7 @@ qr_small	= "/tmp/qr-20px.png"
 WIKI_PATH = "./qrtest.wiki/"
 BLUR_MAX = 15
 RED_CONT_MAX = 100
+ROTATE_MAX = 180
 
 function run_tests()
 	-- Make QR codes
@@ -135,10 +141,15 @@ function run_tests()
 		blur(qr_small, image_test, i)
 		test_finish()
 	end
---]]
 	for i=0,RED_CONT_MAX,5 do
 		test_start("reduce-contrast", i)
 		reduce_contrast(qr_med, image_test, i)
+		test_finish()
+	end
+--]]
+	for i=0,ROTATE_MAX,15 do
+		test_start("rotate", i)
+		rotate(qr_med, image_test, i)
 		test_finish()
 	end
 end

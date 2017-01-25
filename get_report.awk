@@ -9,11 +9,24 @@ BEGIN {
 	# print last record
 	print_record()
 
+	if (last_id != test_id) {
+		print_test_header(test_id)
+		last_id = test_id
+	}
+
 	# reset for this record
 	delete quirc_result
 	delete zbar_result
+	delete timing
 	thumb_path = ""
+	test_string = ""
+
 	test_id = $2
+	test_level = $4
+}
+
+/test string:/ {
+	test_string = $2
 }
 
 /thumb image:/ {
@@ -21,7 +34,11 @@ BEGIN {
 }
 
 /quirc / {
-	quirc_result[i++] = $0
+	split($0, a, " ")
+	if (a[2] == test_string)
+		quirc_result[j++] = "PASS"
+	else
+		quirc_result[j++] = $0
 }
 
 /DECODE/ {
@@ -29,7 +46,15 @@ BEGIN {
 }
 
 /zbar / {
-	zbar_result[j++] = $0
+	split($0, a, " ")
+	if (a[2] == test_string)
+		zbar_result[j++] = "PASS"
+	else
+		bar_result[j++] = $0
+}
+
+/^\[/ {
+	timing[l++] = $0
 }
 
 END {
@@ -38,11 +63,23 @@ END {
 
 function print_record()
 {
-	print test_id
-	print thumb_path
-	for (e in zbar_result)
-		print zbar_result[e]
+	print "\n## " test_level
+	print "\n!["test_id" "test_level"]("thumb_path")"
+	print "\nquirc output:\n"
 	for (e in quirc_result)
-		print quirc_result[e]
+		print "    " quirc_result[e]
+	print "\nZbar output:\n"
+	for (e in zbar_result)
+		print "    " zbar_result[e]
+	print "\nTiming: \n"
+	for (e in timing)
+		print "    " timing[e]
 
+}
+
+function print_test_header(id)
+{
+	print "\n"
+	print "# " id
+	print "===="
 }

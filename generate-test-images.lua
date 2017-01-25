@@ -116,7 +116,7 @@ function test_start(identifier, level)
 	image_test = "/tmp/" .. out .. ".png"
 	image_thumb = "output/" .. out .. "-thumb.png"
 	path_thumb = WIKI_PATH .. image_thumb
-	print("test:\t\t[" .. identifier .. " level " .. level .. "]")
+	print("test:\t\t[" .. identifier .. "] [level " .. level .. "]")
 	print("test string:\t[" .. test_string .. "]")
 	print("test image:\t[" .. image_test .. "]")
 	print("thumb image:\t[" .. image_thumb .. "]")
@@ -158,7 +158,7 @@ function run_tests()
 	os.execute("mkdir -p " .. WIKI_PATH .. "output")
 
 	-- Blur
---[[
+---[[
 	for i=0,BLUR_MAX,1 do
 		test_start("blur", i)
 		blur(qr_small, image_test, i)
